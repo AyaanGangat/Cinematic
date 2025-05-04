@@ -13,7 +13,7 @@
 
         <q-toolbar-title>
           <q-icon name="movie" size="md" class="q-mr-sm" />
-          Cinematic
+          Ayaan's Cinema Reviews
         </q-toolbar-title>
 
         <q-space />
