@@ -11,9 +11,9 @@
           @click="toggleLeftDrawer"
         />
 
-        <q-toolbar-title>
+        <q-toolbar-title class="full-title">
           <q-icon name="movie" size="md" class="q-mr-sm" />
-          Ayaan’s Movieverse
+          Ayaan's Movieverse
         </q-toolbar-title>
 
         <q-space />
@@ -192,5 +192,17 @@ export default defineComponent({
 <style scoped>
 .q-toolbar {
   min-height: 50px;
+}
+.full-title {
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: unset !important;
+  max-width: 100%;
+  font-size: 1.2rem;
+}
+@media (max-width: 600px) {
+  .full-title {
+    font-size: 1rem;
+  }
 }
 </style>
