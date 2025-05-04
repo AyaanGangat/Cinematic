@@ -13,7 +13,7 @@
 
         <q-toolbar-title>
           <q-icon name="movie" size="md" class="q-mr-sm" />
-          Ayaan's Cinema Reviews
+          Ayaan’s Movieverse
         </q-toolbar-title>
 
         <q-space />
