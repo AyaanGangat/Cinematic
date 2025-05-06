@@ -1,7 +1,7 @@
 <template>
   <q-layout view="hHh lpR fFf" :class="{ 'bg-grey-1': !$q.dark.isActive, 'bg-dark': $q.dark.isActive }">
     <q-header elevated :class="$q.dark.isActive ? 'bg-dark text-white' : 'bg-primary text-white'">
-      <q-toolbar>
+      <q-toolbar class="main-toolbar">
         <q-btn
           flat
           dense
@@ -11,33 +11,43 @@
           @click="toggleLeftDrawer"
         />
 
-        <q-toolbar-title class="full-title">
-          <q-icon name="movie" size="md" class="q-mr-sm" />
-          Ayaan's Movieverse
-        </q-toolbar-title>
+        <div class="toolbar-title-nav">
+          <q-toolbar-title class="full-title">
+            <q-icon name="movie" size="md" class="q-mr-sm" />
+            Ayaan's Mediaverse
+          </q-toolbar-title>
+          <q-tabs v-model="tab" shrink class="toolbar-tabs">
+            <q-route-tab to="/" label="Home" />
+            <q-route-tab to="/movies" label="Movies" />
+            <q-route-tab to="/tv" label="TV Shows" />
+            <q-route-tab v-if="currentUser" to="/profile" label="Profile" />
+          </q-tabs>
+        </div>
 
-        <q-space />
+        <div class="toolbar-search">
+          <q-input
+            v-model="searchQuery"
+            dense
+            outlined
+            placeholder="Search movies and TV shows"
+            class="q-mr-md"
+            style="width: 300px"
+            @keyup.enter="performSearch"
+          >
+            <template v-slot:append>
+              <q-icon name="search" class="cursor-pointer" @click="performSearch" />
+            </template>
+          </q-input>
+        </div>
 
-        <q-input
-          v-model="searchQuery"
+        <q-btn
+          class="search-icon"
+          icon="search"
+          @click="showMobileSearch = true"
+          flat
+          round
           dense
-          outlined
-          placeholder="Search movies and TV shows"
-          class="q-mr-md"
-          style="width: 300px"
-          @keyup.enter="performSearch"
-        >
-          <template v-slot:append>
-            <q-icon name="search" class="cursor-pointer" @click="performSearch" />
-          </template>
-        </q-input>
-
-        <q-tabs v-model="tab" shrink>
-          <q-route-tab to="/" label="Home" />
-          <q-route-tab to="/movies" label="Movies" />
-          <q-route-tab to="/tv" label="TV Shows" />
-          <q-route-tab v-if="currentUser" to="/profile" label="Profile" />
-        </q-tabs>
+        />
 
         <q-btn
           flat
@@ -114,6 +124,24 @@
     </q-page-container>
 
     <auth-dialog v-model="showAuthDialog" />
+
+    <q-dialog v-model="showMobileSearch">
+      <q-card>
+        <q-input
+          v-model="searchQuery"
+          dense
+          outlined
+          placeholder="Search movies and TV shows"
+          class="q-mr-md"
+          style="width: 300px"
+          @keyup.enter="performSearch"
+        >
+          <template v-slot:append>
+            <q-icon name="search" class="cursor-pointer" @click="performSearch" />
+          </template>
+        </q-input>
+      </q-card>
+    </q-dialog>
   </q-layout>
 </template>
 
@@ -137,6 +165,7 @@ export default defineComponent({
     const showAuthDialog = ref(false)
     const currentUser = computed(() => userService.getCurrentUser())
     const searchQuery = ref('')
+    const showMobileSearch = ref(false)
 
     // Dark mode persistence
     if (localStorage.getItem('darkMode') === 'true') {
@@ -179,6 +208,7 @@ export default defineComponent({
       showAuthDialog,
       currentUser,
       searchQuery,
+      showMobileSearch,
       toggleLeftDrawer,
       performSearch,
       logout,
@@ -200,9 +230,47 @@ export default defineComponent({
   max-width: 100%;
   font-size: 1.2rem;
 }
+.toolbar-search {
+  display: block;
+}
+.search-icon {
+  display: none;
+}
+.toolbar-title-nav {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex: 1 1 auto;
+}
+.toolbar-tabs {
+  margin-left: 16px;
+}
 @media (max-width: 600px) {
+  .main-toolbar {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 4px 0;
+  }
+  .toolbar-title-nav {
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+  }
   .full-title {
     font-size: 1rem;
+    max-width: 100vw;
+    margin-bottom: 2px;
+  }
+  .toolbar-tabs {
+    margin-left: 0;
+    width: 100%;
+    font-size: 0.95em;
+  }
+  .toolbar-search {
+    display: none;
+  }
+  .search-icon {
+    display: inline-flex;
   }
 }
 </style>
